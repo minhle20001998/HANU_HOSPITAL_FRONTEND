@@ -1,0 +1,21 @@
+.MuiTimelineItem-missingOppositeContent:before {
+  flex: 0 !important;
+  padding: 0 !important;
+}
+.timeline-content {
+  margin-bottom: 18px;
+}
+
+.timeline .date {
+  color: #f50057;
+}
+
+.timeline .faculty {
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.timeline .doctor-name {
+  color: #007bff;
+  font-style: italic;
+}
