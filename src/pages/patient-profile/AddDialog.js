@@ -62,12 +62,17 @@ class AddDialog extends Component {
                         </DialogContentText>
                         <input type="number" name="price" onChange={this.handleChangeInput} />
                     </div>
-
                     <div>
                         <DialogContentText>
                             Doctor
                         </DialogContentText>
                         <input type="text" name="address" onChange={this.handleChangeInput} />
+                    </div>
+                    <div className="full-size">
+                        <DialogContentText>
+                            Diagnosis
+                        </DialogContentText>
+                        <textarea name="description" onChange={this.handleChangeInput}></textarea>
                     </div>
                     <div className="full-size">
                         <DialogContentText>

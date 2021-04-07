@@ -19,7 +19,8 @@ class TimeLine extends Component {
                         <p className="timeline-content date">02 Jun 2021</p>
                         <p className="timeline-content faculty">Polyclinic Department</p>
                         <p className="timeline-content doctor-name">Dr. Jimmy Ngủyên</p>
-                        <p className="timeline-content note"><b>Note:</b> High blood pressure</p>
+                        <p className="timeline-content diagnosis"><b>Diagnosis:</b> High blood pressure</p>
+                        <p className="timeline-content note"><b>Note:</b> Exercise regularly</p>
                         <p className="timeline-content prescribe"><b>Prescribe</b> : Boganic, Vitamin C</p>
                     </div>
                 </TimelineContent>
@@ -34,7 +35,8 @@ class TimeLine extends Component {
                         <p className="timeline-content date">02 Jun 2021</p>
                         <p className="timeline-content faculty">Polyclinic Department</p>
                         <p className="timeline-content doctor-name">Dr. Jimmy Ngủyên</p>
-                        <p className="timeline-content note"><b>Note:</b> High blood pressure</p>
+                        <p className="timeline-content diagnosis"><b>Diagnosis:</b> High blood pressure</p>
+                        <p className="timeline-content note"><b>Note:</b> Exercise regularly</p>
                         <p className="timeline-content prescribe"><b>Prescribe</b> : Boganic, Vitamin C</p>
                     </div>
                 </TimelineContent>

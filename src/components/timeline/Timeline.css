@@ -2,6 +2,13 @@
   flex: 0 !important;
   padding: 0 !important;
 }
+
+.timeline {
+  border: 1px solid #a7a7a7;
+  padding: 15px 15px;
+  border-radius: 10px;
+}
+
 .timeline-content {
   margin-bottom: 18px;
 }
@@ -18,4 +25,8 @@
 .timeline .doctor-name {
   color: #007bff;
   font-style: italic;
+}
+
+.MuiTimelineContent-root{
+  padding: 30px 16px !important;
 }

@@ -92,6 +92,10 @@ class PatientProfile extends Component {
                         </Typography>
                         <br />
                         <div>
+                            <span style={{ fontSize: "17px", fontWeight: "bold" }}>Sex:	&nbsp;</span>
+                            <span>Male </span>
+                        </div>
+                        <div>
                             <span style={{ fontSize: "17px", fontWeight: "bold" }}>Blood Type:	&nbsp;</span>
                             <span>C </span>
                         </div>

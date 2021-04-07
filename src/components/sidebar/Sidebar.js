@@ -9,6 +9,7 @@ import './Sidebar.css'
 import HomeIcon from '@material-ui/icons/Home';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import PersonIcon from '@material-ui/icons/Person';
+
 const menus = [
     {
         title: "Dashboard",

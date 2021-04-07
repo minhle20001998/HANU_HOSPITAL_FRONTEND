@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Navbar from './components/navbar/Navbar'
 import Sidebar from './components/sidebar/Sidebar'
 import PatientProfile from './pages/patient-profile/PatientProfile'
+import Appointment from './pages/appointments/Appointment'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import './App.css'
@@ -12,8 +13,10 @@ class App extends Component {
         <Navbar />
         <section id="main-section">
           <Sidebar />
-
           <Switch>
+            <Route path="/appointments">
+              <Appointment />
+            </Route>
             <Route path="/patients">
               <PatientProfile />
             </Route>
