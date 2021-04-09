@@ -9,24 +9,24 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import Button from '@material-ui/core/Button';
-import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import AddIcon from '@material-ui/icons/Add';
-import './Appointment.css';
-import AddDialog from './AddAppointmentDialog';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { Link } from 'react-router-dom'
+import AddPatientDialog from './AddPatientDialog'
+import './Patient.css'
 
 const data = {
     active:
         [
             { title: "Dashboard", link: "dashboard" }
         ],
-    current: "Appointments"
+    current: "Patients"
 }
 
-class Appointment extends Component {
+class Patient extends Component {
 
     constructor(props) {
         super(props);
@@ -36,6 +36,7 @@ class Appointment extends Component {
         this.handleToggleDialogAdd = this.handleToggleDialogAdd.bind(this);
 
     }
+
 
     handleToggleDialogAdd() {
         this.setState((currentState) => ({
@@ -49,10 +50,10 @@ class Appointment extends Component {
 
     render() {
         const { isOpenDialogAdd } = this.state;
-        return <div className="appointment full">
+        return <div className="patient full">
             <BreadCrumbs data={data} />
             {
-                isOpenDialogAdd && <AddDialog
+                isOpenDialogAdd && <AddPatientDialog
                     open={isOpenDialogAdd}
                     handleToggleDialogAdd={this.handleToggleDialogAdd}
                     addNewReport={this.addNewReport}
@@ -61,7 +62,7 @@ class Appointment extends Component {
             <div className="add-area">
                 <button className="report" onClick={this.handleToggleDialogAdd}><span>Add</span> <AddIcon /></button>
             </div>
-            <section id="appointment-section" className="main-section">
+            <section id="patient-section" className="main-section">
                 <TableContainer component={Paper}>
                     <div className="search-area">
                         <InputBase
@@ -77,9 +78,9 @@ class Appointment extends Component {
                             <TableRow>
                                 <TableCell align="left">ID</TableCell>
                                 <TableCell align="left">Patient Name</TableCell>
-                                <TableCell align="left">Date & Time</TableCell>
-                                <TableCell align="left">Service</TableCell>
-                                <TableCell align="left">Doctor</TableCell>
+                                <TableCell align="left">DOB</TableCell>
+                                <TableCell align="left">Address</TableCell>
+                                <TableCell align="left">Number</TableCell>
                                 <TableCell align="left">Action</TableCell>
                             </TableRow>
                         </TableHead>
@@ -87,22 +88,18 @@ class Appointment extends Component {
                             {/*  */}
                             <TableRow>
                                 <TableCell align="left">1</TableCell>
-                                <TableCell align="left">Le Tuan Minh</TableCell>
                                 <TableCell align="left">
-                                    <p style={{ marginBottom: "10px" }}>13 June 2019</p>
-                                    <p>7:12PM to 8:30PM</p>
+                                    <Link to="/patient-profile" className="user-link">Le Tuan Minh</Link>
                                 </TableCell>
-                                <TableCell align="left">Dental Checkup</TableCell>
-                                <TableCell align="left">Dr.Jimmy</TableCell>
+                                <TableCell align="left">24-09-200</TableCell>
+                                <TableCell align="left">108 Cu Chinh Lan</TableCell>
+                                <TableCell align="left">096479454</TableCell>
                                 <TableCell align="left">
-                                    <Link to="patient-profile">
-                                        <Button variant="outlined" color="primary" size="small" >
-
-                                            <RemoveRedEyeIcon></RemoveRedEyeIcon>
-                                        </Button>
-                                    </Link>
-                                    <Button variant="outlined" color="secondary" size="small">
-                                        <VisibilityOffIcon></VisibilityOffIcon>
+                                    <Button color="primary" size="small">
+                                        <EditIcon fontSize="small" className="edit-button"></EditIcon>
+                                    </Button>
+                                    <Button color="secondary" size="small">
+                                        <DeleteIcon fontSize="small" color="secondary"></DeleteIcon>
                                     </Button>
                                 </TableCell>
                             </TableRow>
@@ -112,8 +109,8 @@ class Appointment extends Component {
                     </Table>
                 </TableContainer>
             </section>
-        </div >
+        </div>
     }
 }
 
-export default Appointment;
+export default Patient

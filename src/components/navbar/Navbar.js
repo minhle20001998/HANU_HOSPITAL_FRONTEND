@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import './Navbar.css';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { Link } from 'react-router-dom'
 
 class Navbar extends Component {
     render() {
         return <nav className="main-nav">
             <div className="logo">
-                <a href="*">
+                <Link to="/dashboard">
                     <i className="fas fa-hospital-symbol"></i>
                     <span>HANU HOSPITAL</span>
-                </a>
+                </Link>
             </div>
             <div className="actions">
-                <a href="*">
+                <Link to="/login">
                     <ExitToAppIcon color="secondary" />
-                </a>
+                </Link>
             </div>
         </nav>
     }

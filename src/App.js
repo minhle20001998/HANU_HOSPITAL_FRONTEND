@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import Navbar from './components/navbar/Navbar'
 import Sidebar from './components/sidebar/Sidebar'
+import Patient from './pages/patient/Patient'
 import PatientProfile from './pages/patient-profile/PatientProfile'
 import Appointment from './pages/appointments/Appointment'
+import Login from './pages/login/Login'
+
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import './App.css'
@@ -12,20 +15,27 @@ class App extends Component {
       <Router>
         <Navbar />
         <section id="main-section">
-          <Sidebar />
           <Switch>
+            <Route path="/login">
+              <Login />
+            </Route>
             <Route path="/appointments">
+              <Sidebar />
               <Appointment />
             </Route>
             <Route path="/patients">
-              <PatientProfile />
+              <Sidebar />
+              <Patient />
             </Route>
             <Route path="/patient-profile">
+              <Sidebar />
               <PatientProfile />
             </Route>
             <Route path="/users">
+              <Sidebar />
             </Route>
             <Route path="/">
+              <Sidebar />
             </Route>
           </Switch>
         </section>

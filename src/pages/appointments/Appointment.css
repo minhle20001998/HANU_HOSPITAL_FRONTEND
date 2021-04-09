@@ -1,4 +1,4 @@
-#appointment-section {
+.main-section {
   padding: 10px 10px 10px 0px;
 }
 
@@ -20,12 +20,12 @@
 
 .search-area .MuiInputBase-input {
   padding: 5px 10px !important;
-  border: 1px solid #b9b9b9;
+  border: 2px solid #b9b9b9;
   border-radius: 5px;
 }
 
 .search-area .MuiInputBase-input:focus {
-  border: 1px solid rgb(49, 180, 49);
+  border: 2px solid rgb(35, 153, 35);
 }
 
 .search-area .search-button {
@@ -41,10 +41,11 @@
 }
 
 .MuiTableCell-head {
-  color: green !important;
+  color: rgb(0, 85, 0) !important;
+  font-weight: bold !important;
 }
 
-.add-appointment {
+.add-area {
   display: flex;
   justify-content: flex-end;
   margin: 15px 0;

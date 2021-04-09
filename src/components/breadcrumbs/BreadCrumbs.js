@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
+import { Link as Linker } from 'react-router-dom'
 
 // const sample = {
 //     active: [{ title: "Homepage", link: "dashboard" }],
@@ -15,9 +16,11 @@ class BreadCrumbs extends Component {
             <Typography variant="h6" style={{ color: "green", fontWeight: '600' }}>{data.current}</Typography>
             <Breadcrumbs aria-label="breadcrumb" separator="›" >
                 {data.active.map(bread => {
-                    return <Link color="inherit" href={bread.link}>
-                        {bread.title}
-                    </Link>
+                    return <Linker to={bread.link}>
+                        <Link color="textSecondary" >
+                            {bread.title}
+                        </Link>
+                    </Linker>
                 })}
                 <Typography color="textPrimary">{data.current}</Typography>
             </Breadcrumbs>
