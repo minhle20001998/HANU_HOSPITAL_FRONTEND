@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
 import { Link as Linker } from 'react-router-dom'
 
 // const sample = {
@@ -16,10 +15,10 @@ class BreadCrumbs extends Component {
             <Typography variant="h6" style={{ color: "green", fontWeight: '600' }}>{data.current}</Typography>
             <Breadcrumbs aria-label="breadcrumb" separator="›" >
                 {data.active.map(bread => {
-                    return <Linker to={bread.link}>
-                        <Link color="textSecondary" >
+                    return <Linker key={bread.title} to={bread.link}>
+                        <p color="textSecondary" >
                             {bread.title}
-                        </Link>
+                        </p>
                     </Linker>
                 })}
                 <Typography color="textPrimary">{data.current}</Typography>

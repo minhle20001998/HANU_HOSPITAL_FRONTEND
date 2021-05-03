@@ -8,8 +8,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import './Sidebar.css'
 import HomeIcon from '@material-ui/icons/Home';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
-import PersonIcon from '@material-ui/icons/Person';
-
+import AccessibleForwardIcon from '@material-ui/icons/AccessibleForward';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import BuildIcon from '@material-ui/icons/Build';
+import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 const menus = [
     {
         title: "Dashboard",
@@ -23,8 +25,23 @@ const menus = [
     },
     {
         title: "Patients",
-        icon: <PersonIcon />,
+        icon: <AccessibleForwardIcon />,
         link: "patients"
+    },
+    {
+        title: "Employee",
+        icon: <SupervisorAccountIcon />,
+        link: "employee"
+    },
+    {
+        title: "Equipment",
+        icon: <BuildIcon />,
+        link: "equipment"
+    },
+    {
+        title: "Medicine",
+        icon: <LocalHospitalIcon />,
+        link: "medicine"
     }
 ]
 

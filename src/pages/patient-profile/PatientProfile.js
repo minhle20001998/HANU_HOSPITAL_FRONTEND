@@ -9,7 +9,7 @@ import ListItem from '@material-ui/core/ListItem';
 import TimeLine from '../../components/timeline/Timeline'
 import userImage from '../../images/user.png';
 import AddIcon from '@material-ui/icons/Add';
-const data = {
+const breadcrumbs = {
     active:
         [
             { title: "Dashboard", link: "dashboard" },
@@ -41,7 +41,7 @@ class PatientProfile extends Component {
     render() {
         const { isOpenDialogAdd } = this.state;
         return <div className="patient-profile full">
-            <BreadCrumbs data={data} />
+            <BreadCrumbs data={breadcrumbs} />
             {
                 isOpenDialogAdd && <AddDialog
                     open={isOpenDialogAdd}

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import loginImage from '../../images/doctor.jpg'
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import './Login.css'
@@ -60,10 +59,10 @@ class Login extends Component {
     async onSubmit(event) {
         event.preventDefault();
         const { username, password } = this.state
-        const req = {
-            username: username,
-            password: password
-        }
+        // const req = {
+        //     username: username,
+        //     password: password
+        // }
         try {
             const response = await axios({
                 method: 'post',
@@ -79,7 +78,7 @@ class Login extends Component {
     }
 
     render() {
-        const { status } = this.state;
+        // const { status } = this.state;
         return <div className="login">
             <form className="form">
                 <Typography variant="h4" gutterBottom>

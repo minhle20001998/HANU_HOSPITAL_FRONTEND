@@ -9,67 +9,33 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import Button from '@material-ui/core/Button';
-import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import AddIcon from '@material-ui/icons/Add';
-import './Appointment.css';
-import AddDialog from './AddAppointmentDialog';
 import { Link } from 'react-router-dom'
-
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 const data = {
     active:
         [
             { title: "Dashboard", link: "dashboard" }
         ],
-    current: "Appointments"
+    current: "Employee"
 }
 
-class Appointment extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            isOpenDialogAdd: false,
-        }
-        this.handleToggleDialogAdd = this.handleToggleDialogAdd.bind(this);
-
-    }
-
-    handleToggleDialogAdd() {
-        this.setState((currentState) => ({
-            isOpenDialogAdd: !currentState.isOpenDialogAdd
-        }));
-    }
-
-    addNewReport(data) {
-        console.log(data);
-    }
-
-    componentDidMount(){
-    }
-
+class Employee extends Component {
     render() {
-        const { isOpenDialogAdd } = this.state;
-        return <div className="appointment full">
+        return <div className="employee full">
             <BreadCrumbs data={data} />
-            {
-                isOpenDialogAdd && <AddDialog
-                    open={isOpenDialogAdd}
-                    handleToggleDialogAdd={this.handleToggleDialogAdd}
-                    addNewReport={this.addNewReport}
-                />
-            }
             <div className="add-area">
                 <button className="report" onClick={this.handleToggleDialogAdd}><span>Add</span> <AddIcon /></button>
             </div>
-            <section id="appointment-section" className="main-section">
+            <section id="employee-section" className="main-section">
                 <TableContainer component={Paper}>
                     <div className="search-area">
                         <InputBase
                             className="seach-bar"
-                            placeholder="Search Appointment"
+                            placeholder="Search Employee"
                         />
                         <IconButton type="submit" className="search-button" aria-label="search">
                             <SearchIcon />
@@ -79,7 +45,7 @@ class Appointment extends Component {
                         <TableHead>
                             <TableRow>
                                 <TableCell align="left">ID</TableCell>
-                                <TableCell align="left">Patient Name</TableCell>
+                                <TableCell align="left">Employee Name</TableCell>
                                 <TableCell align="left">Date & Time</TableCell>
                                 <TableCell align="left">Service</TableCell>
                                 <TableCell align="left">Doctor</TableCell>
@@ -90,7 +56,9 @@ class Appointment extends Component {
                             {/*  */}
                             <TableRow>
                                 <TableCell align="left">1</TableCell>
-                                <TableCell align="left">Le Tuan Minh</TableCell>
+                                <TableCell align="left">
+                                    <Link to="/employee-profile" className="user-link">Le Tuan Minh</Link>
+                                </TableCell>
                                 <TableCell align="left">
                                     <p style={{ marginBottom: "10px" }}>13 June 2019</p>
                                     <p>7:12PM to 8:30PM</p>
@@ -98,14 +66,11 @@ class Appointment extends Component {
                                 <TableCell align="left">Dental Checkup</TableCell>
                                 <TableCell align="left">Dr.Jimmy</TableCell>
                                 <TableCell align="left">
-                                    <Link to="patient-profile">
-                                        <Button variant="outlined" color="primary" size="small" >
-
-                                            <RemoveRedEyeIcon></RemoveRedEyeIcon>
-                                        </Button>
-                                    </Link>
-                                    <Button variant="outlined" color="secondary" size="small">
-                                        <VisibilityOffIcon></VisibilityOffIcon>
+                                    <Button color="primary" size="small">
+                                        <EditIcon fontSize="small" className="edit-button"></EditIcon>
+                                    </Button>
+                                    <Button color="secondary" size="small">
+                                        <DeleteIcon fontSize="small" color="secondary"></DeleteIcon>
                                     </Button>
                                 </TableCell>
                             </TableRow>
@@ -115,8 +80,8 @@ class Appointment extends Component {
                     </Table>
                 </TableContainer>
             </section>
-        </div >
+        </div>
     }
 }
 
-export default Appointment;
+export default Employee;
