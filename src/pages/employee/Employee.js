@@ -8,14 +8,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import AddIcon from '@material-ui/icons/Add';
-import { Link } from 'react-router-dom'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { getDoctors, getReps } from '../../utils/api';
+import { getDoctors, getReps, addDoctor, addRep } from '../../utils/api';
+import AddEmployeeDialog from './AddEmployeeDialog'
 const data = {
     active:
         [
@@ -31,13 +30,43 @@ class Employee extends Component {
         super(props)
         this.state = {
             doctors: null,
-            reps: null
+            reps: null,
+            isOpenDialogAdd: false,
+            isOpenDialogEdit: false,
         }
+        this.handleToggleDialogAdd = this.handleToggleDialogAdd.bind(this);
+        this.handleToggleDialogEdit = this.handleToggleDialogEdit.bind(this);
+        this.addNewEmployee = this.addNewEmployee.bind(this);
+    }
+
+    async addNewEmployee(data) {
+        const { job, ...restOfDoctor } = data;
+        if (job === 'doctor') {
+            await addDoctor({ ...restOfDoctor })
+        } else if (job === 'receptionist') {
+            const { speciality, ...restOfRec } = { ...restOfDoctor }
+            await addRep({ ...restOfRec })
+        }
+        this.handleToggleDialogAdd();
+        this.getAllDoctors();
+        this.getAllReps();
     }
 
     componentDidMount() {
         this.getAllDoctors();
         this.getAllReps();
+    }
+
+    handleToggleDialogAdd() {
+        this.setState((currentState) => ({
+            isOpenDialogAdd: !currentState.isOpenDialogAdd
+        }));
+    }
+
+    handleToggleDialogEdit() {
+        this.setState((currentState) => ({
+            isOpenDialogEdit: !currentState.isOpenDialogEdit
+        }));
     }
 
     getAllDoctors = async () => {
@@ -57,9 +86,16 @@ class Employee extends Component {
 
 
     render() {
-        const { doctors, reps } = this.state;
+        const { doctors, reps, isOpenDialogAdd } = this.state;
         return <div className="employee full">
             <BreadCrumbs data={data} />
+            {
+                isOpenDialogAdd && <AddEmployeeDialog
+                    open={isOpenDialogAdd}
+                    handleToggleDialogAdd={this.handleToggleDialogAdd}
+                    addNewEmployee={this.addNewEmployee}
+                />
+            }
             <div className="add-area">
                 <button className="report" onClick={this.handleToggleDialogAdd}><span>Add</span> <AddIcon /></button>
             </div>
@@ -96,6 +132,14 @@ class Employee extends Component {
                                     <TableCell align="left">{d.phone}</TableCell>
                                     <TableCell align="left">{d.email}</TableCell>
                                     <TableCell align="left">{d.speciality}</TableCell>
+                                    <TableCell align="left">
+                                        <IconButton aria-label="edit">
+                                            <EditIcon fontSize="small" className="edit-button" />
+                                        </IconButton>
+                                        <IconButton aria-label="delete">
+                                            <DeleteIcon fontSize="small" color="secondary" />
+                                        </IconButton>
+                                    </TableCell>
                                 </TableRow>
                             })}
 
@@ -106,7 +150,15 @@ class Employee extends Component {
                                     <TableCell align="left">{r.age}</TableCell>
                                     <TableCell align="left">{r.phone}</TableCell>
                                     <TableCell align="left">{r.email}</TableCell>
-                                    <TableCell align="left">None</TableCell>
+                                    <TableCell align="left"></TableCell>
+                                    <TableCell align="left">
+                                        <IconButton aria-label="edit">
+                                            <EditIcon fontSize="small" className="edit-button" />
+                                        </IconButton>
+                                        <IconButton aria-label="delete">
+                                            <DeleteIcon fontSize="small" color="secondary" />
+                                        </IconButton>
+                                    </TableCell>
                                 </TableRow>
                             })}
 

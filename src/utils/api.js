@@ -80,9 +80,19 @@ export async function getDoctors() {
     return data;
 }
 
+export async function addDoctor(info) {
+    const { data } = await axios.post(`${localhost}/api/doctor/add`, info)
+    return data;
+}
+
 //RECEPTIONIST
 
 export async function getReps() {
     const { data } = await axios.get(`${localhost}/api/Receptionist/getAll`)
+    return data;
+}
+
+export async function addRep(info) {
+    const { data } = await axios.post(`${localhost}/api/Receptionist/add`,info)
     return data;
 }
