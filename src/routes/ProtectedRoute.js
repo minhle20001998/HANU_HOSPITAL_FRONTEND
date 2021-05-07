@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { withRouter,Route, Redirect } from 'react-router-dom';
-
+import { withRouter, Route, Redirect } from 'react-router-dom';
+import { checkStillLogin } from '../utils/utils'
 class ProtectedRoute extends Component {
     render() {
-        const { isLogin, path, children, exact } = this.props;
-        console.log("protected ", this.props)
+        const { path, children, exact } = this.props;
+        console.log("protected ")
         return <Route exact={exact} to={path}>
-            {isLogin ? children : <Redirect push to="/login" />}
+            {checkStillLogin() ? children : <Redirect push to="/login" />}
         </Route>
     }
 }

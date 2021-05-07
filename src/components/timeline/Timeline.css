@@ -7,7 +7,7 @@
   border: 1px solid #a7a7a7;
   padding: 15px 15px;
   border-radius: 10px;
-  background: rgb(245, 245, 245);
+  background: rgb(255, 251, 241);
 }
 
 .timeline-content {
@@ -28,6 +28,34 @@
   font-style: italic;
 }
 
-.MuiTimelineContent-root{
+.MuiTimelineContent-root {
   padding: 30px 16px !important;
+}
+
+.pres-table {
+  margin-top: 10px;
+  border-collapse: collapse;
+  background-color: white;
+}
+
+.pres-table th,
+.pres-table td {
+  border: 1px solid #bebebe;
+  text-align: left;
+  padding: 8px;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+#add-btn {
+  color: green;
 }

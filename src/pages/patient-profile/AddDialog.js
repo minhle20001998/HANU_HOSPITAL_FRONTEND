@@ -11,7 +11,7 @@ class AddDialog extends Component {
         this.state = {
             form: {
                 name: '',
-                catalog_name: '',
+                gender: '',
                 price: '',
                 address: '',
                 description: '',

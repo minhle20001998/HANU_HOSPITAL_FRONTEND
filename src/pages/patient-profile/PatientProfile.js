@@ -9,6 +9,7 @@ import ListItem from '@material-ui/core/ListItem';
 import TimeLine from '../../components/timeline/Timeline'
 import userImage from '../../images/user.png';
 import AddIcon from '@material-ui/icons/Add';
+import { getAllRecords } from '../../utils/api'
 const breadcrumbs = {
     active:
         [
@@ -23,6 +24,7 @@ class PatientProfile extends Component {
         super(props);
         this.state = {
             isOpenDialogAdd: false,
+            records: null
         }
         this.handleToggleDialogAdd = this.handleToggleDialogAdd.bind(this);
 
@@ -38,8 +40,20 @@ class PatientProfile extends Component {
         console.log(data);
     }
 
+    async componentDidMount() {
+        const records = await getAllRecords();
+        this.setState({
+            records: records
+        })
+        const doctors = []
+        const patients = []
+        records.map(r => { 
+            doctors.push()
+        })
+    }
+
     render() {
-        const { isOpenDialogAdd } = this.state;
+        const { isOpenDialogAdd, records } = this.state;
         return <div className="patient-profile full">
             <BreadCrumbs data={breadcrumbs} />
             {
@@ -55,7 +69,7 @@ class PatientProfile extends Component {
                         <img src={userImage} alt="user-avatar" />
                         <List component="nav" aria-label="mailbox folders">
                             <ListItem >
-                                <Typography variant="h5" color="Primary">
+                                <Typography variant="h5" color="primary">
                                     Patient Name
                                 </Typography>
                             </ListItem>
@@ -64,7 +78,7 @@ class PatientProfile extends Component {
                                 <Typography variant="h6" >
                                     Email
                                 </Typography>
-                                <Typography variant="p" >
+                                <Typography  >
                                     test@gmail.com
                                 </Typography>
                             </ListItem>
@@ -72,7 +86,7 @@ class PatientProfile extends Component {
                                 <Typography variant="h6" >
                                     Phone
                                 </Typography>
-                                <Typography variant="p" >
+                                <Typography  >
                                     0xxxxxxx
                                 </Typography>
                             </ListItem>
@@ -80,14 +94,14 @@ class PatientProfile extends Component {
                                 <Typography variant="h6" >
                                     Address
                                 </Typography>
-                                <Typography variant="p" >
+                                <Typography  >
                                     69 Paleto Bay, US
                                 </Typography>
                             </ListItem>
                         </List>
                     </div>
                     <div id="general-report">
-                        <Typography variant="h6" color="Primary">
+                        <Typography variant="h6" color="primary">
                             General Report
                         </Typography>
                         <br />
@@ -114,11 +128,11 @@ class PatientProfile extends Component {
                     </div>
                 </aside>
                 <main>
-                    <Typography variant="h6" color="Primary">
+                    <Typography variant="h6" color="primary">
                         Activity
                     </Typography>
                     <button className="report" onClick={this.handleToggleDialogAdd}><span>Add</span> <AddIcon /></button>
-                    <TimeLine />
+                    <TimeLine records={records} />
                 </main>
             </section>
         </div>

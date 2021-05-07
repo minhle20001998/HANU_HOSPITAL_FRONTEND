@@ -9,8 +9,10 @@ import Employee from './pages/employee/Employee'
 import Equipment from './pages/equipment/Equipment'
 import EmployeeProfile from './pages/employee-profile/EmployeeProfile'
 import Medicine from './pages/medicine/Medicine'
+import Register from './pages/register/Register'
 import ProtectedRoute from './routes/ProtectedRoute'
 import LoginRoute from './routes/LoginRoute'
+import Department from './pages/department/Department'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import './App.css'
@@ -19,62 +21,65 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLogin: false
+      user: null,
     }
+    this.setUser = this.setUser.bind(this);
   }
 
-  componentDidMount() {
-
-  }
-
-  checkLogin() {
-    
+  setUser(user, callback) {
+    this.setState({ user: user }, callback);
   }
 
   render() {
-    const { isLogin } = this.state;
     return <div className="app">
       <Router>
         <Navbar />
         <section id="main-section">
           <Switch>
-            <Route path="/login">
-              <Login />
+            <LoginRoute exact path="/login">
+              <Login setUser={this.setUser} />
+            </LoginRoute>
+            <Route path="/signup">
+              <Register />
             </Route>
-            <Route path="/(|dashboard)/">
+            <ProtectedRoute exact path="/(|dashboard)/">
               <Sidebar />
-            </Route>
-            <Route path="/appointments">
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/appointments">
               <Sidebar />
               <Appointment />
-            </Route>
-            <Route path="/patients">
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/patients">
               <Sidebar />
               <Patient />
-            </Route>
-            <Route path="/patient-profile">
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/patient-profile/:id">
               <Sidebar />
               <PatientProfile />
-            </Route>
-            <Route path="/users">
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/users">
               <Sidebar />
-            </Route>
-            <Route path="/employee">
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/employee">
               <Employee />
               <Sidebar />
-            </Route>
-            <Route path="/equipment">
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/equipment">
               <Sidebar />
               <Equipment />
-            </Route>
-            <Route path="/employee-profile">
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/employee-profile">
               <Sidebar />
               <EmployeeProfile />
-            </Route>
-            <Route path="/medicine">
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/medicine">
               <Sidebar />
               <Medicine />
-            </Route>
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/department">
+              <Sidebar />
+              <Department />
+            </ProtectedRoute>
           </Switch>
         </section>
       </Router>

@@ -12,37 +12,44 @@ import AccessibleForwardIcon from '@material-ui/icons/AccessibleForward';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import BuildIcon from '@material-ui/icons/Build';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
+import AmpStoriesIcon from '@material-ui/icons/AmpStories';
 const menus = [
     {
         title: "Dashboard",
         icon: <HomeIcon />,
-        link: "dashboard"
+        link: "/dashboard"
     },
     {
         title: "Appointments",
         icon: <CalendarTodayIcon />,
-        link: "appointments"
+        link: "/appointments"
     },
     {
         title: "Patients",
         icon: <AccessibleForwardIcon />,
-        link: "patients"
+        link: "/patients"
     },
     {
         title: "Employee",
         icon: <SupervisorAccountIcon />,
-        link: "employee"
+        link: "/employee"
     },
     {
         title: "Equipment",
         icon: <BuildIcon />,
-        link: "equipment"
+        link: "/equipment"
     },
     {
         title: "Medicine",
         icon: <LocalHospitalIcon />,
-        link: "medicine"
-    }
+        link: "/medicine"
+    },
+    {
+        title: "Department",
+        icon: <AmpStoriesIcon />,
+        link: "/department"
+    },
+
 ]
 
 const temp_url = "https://www.wrraptheme.com/templates/lucid/hospital/assets/images/user.png";

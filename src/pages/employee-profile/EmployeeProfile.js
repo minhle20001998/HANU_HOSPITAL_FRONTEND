@@ -28,7 +28,7 @@ class EmployeeProfile extends Component {
                         <img src={userImage} alt="user-avatar" />
                         <List component="nav" aria-label="mailbox folders">
                             <ListItem >
-                                <Typography variant="h5" color="Primary">
+                                <Typography variant="h5" color="primary">
                                     Doctor Name
                                 </Typography>
                             </ListItem>
@@ -36,7 +36,7 @@ class EmployeeProfile extends Component {
                     </div>
                 </aside>
                 <main>
-                    <Typography variant="h6" color="Primary">
+                    <Typography variant="h6" color="primary">
                         Basic Info
                     </Typography>
                     <TextField id="outlined-basic" label="Outlined" variant="outlined" size="small" disabled />

@@ -14,7 +14,7 @@
   width: 350px;
   display: flex;
   flex-direction: column;
-  padding: 50px 15px 60px 15px;
+  padding: 50px 15px 30px 15px;
   border-radius: 20px;
   box-shadow: 0 0 10px green;
 }
@@ -52,6 +52,10 @@
 
 .form .MuiOutlinedInput-notchedOutline {
   border-color: rgb(0, 141, 0) !important;
+}
+
+.signup-link a {
+  color: green;
 }
 
 @keyframes fading {

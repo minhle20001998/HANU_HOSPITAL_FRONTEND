@@ -3,95 +3,67 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import './Login.css'
 import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
+import { login } from '../../utils/api';
+import { withRouter } from "react-router";
+
 const axios = require('axios');
 
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: "",
+            usernameOrEmail: "",
             password: "",
             status: ""
         }
-        this.fetchData = this.fetchData.bind(this);
-        this.usernameOnChange = this.usernameOnChange.bind(this);
-        this.passwordOnChange = this.passwordOnChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+        this.handleInput = this.handleInput.bind(this);
+        this.handleOnSubmit = this.handleOnSubmit.bind(this);
     }
 
-    async fetchData(e) {
-        const { username, password } = this.state
-        const req = {
-            username: username,
-            password: password
-        }
-        try {
-            const res = await axios.post('http://localhost:8090/login', req);
-            if (res.data.isAuthen) {
-                this.setState({
-                    status: "correct"
-                })
-            } else {
-                this.setState({
-                    status: "wrong"
-                })
-            }
-        } catch (err) {
-            // Handle Error Here
-            console.error(err);
-        }
-    }
-
-    usernameOnChange() {
-        const username_input = document.querySelector("#username").value;
+    handleInput(type, e) {
         this.setState({
-            username: username_input
+            [type]: e.target.value
         })
     }
 
-    passwordOnChange() {
-        const password_input = document.querySelector("#password").value;
-        this.setState({
-            password: password_input
-        })
-    }
-
-    async onSubmit(event) {
-        event.preventDefault();
-        const { username, password } = this.state
-        // const req = {
-        //     username: username,
-        //     password: password
-        // }
-        try {
-            const response = await axios({
-                method: 'post',
-                url: 'http://localhost:3030/login',
-                data: { username: username, password: password },
-                credentials: 'include'
-            })
-            console.log(response)
-        } catch (err) {
-            // Handle Error Here
-            console.error(err);
+    async handleOnSubmit(e) {
+        e.preventDefault();
+        const { usernameOrEmail, password } = this.state;
+        const { setUser } = this.props;
+        const result = await login({ usernameOrEmail, password });
+        if (result.accessToken) {
+            localStorage.setItem('token', result.accessToken);
+            setUser(result.user, this.props.history.push('/'))
+        } else if (result == 401) {
+            this.setState({ status: "Wrong username/email or password" })
         }
     }
+
+
 
     render() {
-        // const { status } = this.state;
+        const { status } = this.state;
         return <div className="login">
-            <form className="form">
+            <form className="form" onSubmit={this.handleOnSubmit}>
                 <Typography variant="h4" gutterBottom>
                     Login HANU+
                 </Typography>
-                <TextField id="outlined-basic" label="Username" variant="outlined" />
-                <TextField id="outlined-basic" label="Password" variant="outlined" />
-                <Button variant="contained" id="green-text" >
+                <div className="flex-center">
+                    <p style={{ padding: '10px 0px', color: 'red' }}>{status}</p>
+                </div>
+                <TextField id="outlined-basic" label="Username Or Email" variant="outlined" onInput={(e) => { this.handleInput("usernameOrEmail", e) }} />
+                <TextField id="outlined-basic" label="Password" variant="outlined" onInput={(e) => { this.handleInput("password", e) }} />
+                <Button variant="contained" id="green-text" type="submit">
                     Log In
                 </Button>
+                <div className="flex-center signup-link" style={{ marginTop: "40px" }}>
+                    <Link to="signup" >Signup Here !</Link>
+                </div>
             </form>
+
         </div>
     }
 }
 
-export default Login
+export default withRouter(Login)

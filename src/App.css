@@ -97,7 +97,8 @@ p {
   width: 50%;
 }
 
-.MuiDialogContent-root > div input {
+.MuiDialogContent-root > div input,
+.MuiDialogContent-root > div select {
   width: 100%;
   height: 35px;
   padding: 5px;
@@ -122,6 +123,7 @@ p {
 }
 
 .MuiDialogActions-root {
+  padding: 0px !important;
   justify-content: flex-start !important;
 }
 
@@ -144,4 +146,8 @@ p {
 
 .MuiDialogActions-root {
   margin: 20px 0;
+}
+
+.remove-button {
+  color: purple;
 }

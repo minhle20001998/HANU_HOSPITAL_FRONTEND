@@ -175,7 +175,7 @@ class Medicine extends Component {
 
 
     render() {
-        const { sortedMedicine, orderBy, orderDirection, headCells,
+        const {  orderBy, orderDirection, headCells,
             page, rowsPerPage, medicine,
             selectedMedicine, isOpenAddDialog, isOpenDeleteDialog,
             isOpenEditDialog, selectedID } = this.state;

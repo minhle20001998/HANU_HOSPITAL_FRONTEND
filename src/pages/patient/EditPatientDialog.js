@@ -5,21 +5,21 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-
-class AddPatientDialog extends Component {
+class EditPatientDialog extends Component {
     constructor(props) {
         super(props)
         this.state = {
             form: {
-                name: '',
-                gender: 'MALE',
-                dob: '',
-                phoneNumber: '',
-                address: '',
+                id: props.patient.id || '',
+                name: props.patient.name || '',
+                gender: props.patient.gender || 'MALE',
+                dob: props.patient.dob || '',
+                phoneNumber: props.patient.phoneNumber || '',
+                address: props.patient.address || '',
             }
         };
         this.handleChangeInput = this.handleChangeInput.bind(this);
-        this.handeAdd = this.handeAdd.bind(this);
+        this.handeEdit = this.handeEdit.bind(this);
     }
 
     handleChangeInput(e) {
@@ -32,56 +32,59 @@ class AddPatientDialog extends Component {
         }))
     }
 
-    handeAdd() {
-        const { addNewPatient } = this.props;
-        addNewPatient(this.state.form)
+    handeEdit() {
+        const { form } = this.state;
+        const { editPatient } = this.props;
+        editPatient(form.id, form)
     }
 
+
     render() {
-        const { open, handleToggleDialogAdd } = this.props;
+        const { form } = this.state;
+        const { open, handleToggleDialogEdit } = this.props;
         return (
             <Dialog open={open} >
-                <DialogTitle id="form-dialog-title">Add New Patient</DialogTitle>
+                <DialogTitle id="form-dialog-title">Edit Patient</DialogTitle>
                 <DialogContent>
                     <div>
                         <DialogContentText>
                             Patient Name
                         </DialogContentText>
-                        <input type="text" name="name" onChange={this.handleChangeInput} />
+                        <input defaultValue={form.name} type="text" name="name" onChange={this.handleChangeInput} />
                     </div>
                     <div>
                         <DialogContentText>
                             Gender
                         </DialogContentText>
                         <select id="gender-selection" name="gender" onChange={this.handleChangeInput} >
-                            <option value="MALE">Male</option>
-                            <option value="FEMALE">Female</option>
+                            <option value="MALE" selected={(form.name === "MALE") && 'selected'}>Male</option>
+                            <option value="FEMALE" selected={(form.name === "FEMALE") && 'selected'}>Female</option>
                         </select>
                     </div>
                     <div className="">
                         <DialogContentText>
                             DOB
                         </DialogContentText>
-                        <input type="date" name="dob" onChange={this.handleChangeInput} />
+                        <input defaultValue={form.dob} type="date" name="dob" onChange={this.handleChangeInput} />
                     </div>
                     <div>
                         <DialogContentText>
                             Phone Number
                         </DialogContentText>
-                        <input type="number" name="phoneNumber" onChange={this.handleChangeInput} />
+                        <input defaultValue={form.phoneNumber} type="number" name="phoneNumber" onChange={this.handleChangeInput} />
                     </div>
                     <div>
                         <DialogContentText>
                             Address
                         </DialogContentText>
-                        <input type="text" name="address" onChange={this.handleChangeInput} />
+                        <input defaultValue={form.address} type="text" name="address" onChange={this.handleChangeInput} />
                     </div>
                     <div style={{ width: '100%' }}>
                         <DialogActions>
-                            <Button variant="contained" className="action-btn" id="save-btn" onClick={this.handeAdd}>
+                            <Button variant="contained" className="action-btn" id="save-btn" onClick={this.handeEdit}>
                                 Save
                         </Button>
-                            <Button variant="contained" color="secondary" className="action-btn" id="close-btn" onClick={handleToggleDialogAdd}>
+                            <Button variant="contained" color="secondary" className="action-btn" id="close-btn" onClick={handleToggleDialogEdit}>
                                 Close
                         </Button>
                         </DialogActions>
@@ -92,4 +95,4 @@ class AddPatientDialog extends Component {
     }
 }
 
-export default AddPatientDialog;
+export default EditPatientDialog;

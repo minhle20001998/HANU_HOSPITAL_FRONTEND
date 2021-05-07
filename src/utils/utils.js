@@ -1,3 +1,4 @@
+import jwt_decode from "jwt-decode";
 export function getFormattedDate(date) {
     let year = date.getFullYear();
 
@@ -7,9 +8,19 @@ export function getFormattedDate(date) {
     let day = date.getDate().toString();
     day = day.length > 1 ? day : '0' + day;
 
-    return month + '-' + day + '-' + year;
+    return month + '/' + day + '/' + year;
 }
 
 export function searchByIdArray(arr, id) {
     return arr.filter((el) => el.id == id)[0]
+}
+
+export function checkStillLogin() {
+    const token = localStorage.getItem('token');
+    if (token) {
+        const { exp } = jwt_decode(token);
+        const isValid = (((exp * 1000) - Date.now()) > 0);
+        return (token && isValid)
+    }
+    return false;
 }
