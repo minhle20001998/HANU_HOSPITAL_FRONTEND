@@ -11,12 +11,13 @@ class AddEmployeeDialog extends Component {
         super(props)
         this.state = {
             form: {
-                name: '',
-                job: 'doctor',
-                dob: '',
-                phone: '',
-                email: '',
-                speciality: '',
+                id: props.employee.id || '',
+                name: props.employee.name || '',
+                dob: props.employee.dob || '',
+                phone: props.employee.phone || '',
+                email: props.employee.email || '',
+                salary: props.employee.salary || '',
+                speciality: props.employee.speciality || null,
             }
         };
         this.handleChangeInput = this.handleChangeInput.bind(this);
@@ -34,13 +35,13 @@ class AddEmployeeDialog extends Component {
     }
 
     handeAdd() {
-        const { addNewEmployee } = this.props;
+        const { editEmployee } = this.props;
         const { form } = this.state;
-        addNewEmployee(form)
+        editEmployee(form)
     }
 
     render() {
-        const { open, handleToggleDialogAdd } = this.props;
+        const { open, handleToggleDialogEdit } = this.props;
         const { form } = this.state;
         return (
             <Dialog open={open} >
@@ -50,46 +51,37 @@ class AddEmployeeDialog extends Component {
                         <DialogContentText>
                             Employee Name
                         </DialogContentText>
-                        <input type="text" name="name" onChange={this.handleChangeInput} />
-                    </div>
-                    <div>
-                        <DialogContentText>
-                            Job
-                        </DialogContentText>
-                        <select id="gender-selection" name="job" onChange={this.handleChangeInput} >
-                            <option value="doctor">Doctor</option>
-                            <option value="receptionist">Nurse</option>
-                        </select>
+                        <input defaultValue={form.name} type="text" name="name" onChange={this.handleChangeInput} />
                     </div>
                     <div >
                         <DialogContentText>
-                            Date of birth
+                            Age
                         </DialogContentText>
-                        <input type="date" name="dob" onChange={this.handleChangeInput} />
+                        <input defaultValue={form.dob} type="date" name="dob" onChange={this.handleChangeInput} />
                     </div>
                     <div>
                         <DialogContentText>
                             Phone Number
                         </DialogContentText>
-                        <input type="number" name="phone" onChange={this.handleChangeInput} />
+                        <input defaultValue={form.phone} type="number" name="phone" onChange={this.handleChangeInput} />
                     </div>
                     <div>
                         <DialogContentText>
                             Email
                         </DialogContentText>
-                        <input type="email" name="email" onChange={this.handleChangeInput} />
+                        <input defaultValue={form.email} type="email" name="email" onChange={this.handleChangeInput} />
                     </div>
                     <div>
                         <DialogContentText>
                             Salary
                         </DialogContentText>
-                        <input type="number" name="salary" onChange={this.handleChangeInput} />
+                        <input defaultValue={form.salary} type="number" name="salary" onChange={this.handleChangeInput} />
                     </div>
-                    {form.job && form.job === "doctor" && <div>
+                    {form.speciality && <div>
                         <DialogContentText>
                             Speciality
                         </DialogContentText>
-                        <input type="text" name="speciality" onChange={this.handleChangeInput} />
+                        <input defaultValue={form.speciality} type="text" name="speciality" onChange={this.handleChangeInput} />
                     </div>
                     }
                     <div style={{ width: '100%' }}>
@@ -97,7 +89,7 @@ class AddEmployeeDialog extends Component {
                             <Button variant="contained" className="action-btn" id="save-btn" onClick={this.handeAdd}>
                                 Save
                             </Button>
-                            <Button variant="contained" color="secondary" className="action-btn" id="close-btn" onClick={handleToggleDialogAdd}>
+                            <Button variant="contained" color="secondary" className="action-btn" id="close-btn" onClick={handleToggleDialogEdit}>
                                 Close
                             </Button>
                         </DialogActions>

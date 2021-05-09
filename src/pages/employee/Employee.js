@@ -13,8 +13,13 @@ import SearchIcon from '@material-ui/icons/Search';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { getDoctors, getReps, addDoctor, addRep } from '../../utils/api';
+import {
+    getDoctors, getReps, addDoctor, addRep,
+    deleteRep, deleteDoc, getOneRep, getOneDoctor,
+    editDoctor, editNurse
+} from '../../utils/api';
 import AddEmployeeDialog from './AddEmployeeDialog'
+import EditEmployeeDialog from './EditEmployeeDialog'
 const data = {
     active:
         [
@@ -33,10 +38,12 @@ class Employee extends Component {
             reps: null,
             isOpenDialogAdd: false,
             isOpenDialogEdit: false,
+            selectedEmployee: null,
         }
         this.handleToggleDialogAdd = this.handleToggleDialogAdd.bind(this);
         this.handleToggleDialogEdit = this.handleToggleDialogEdit.bind(this);
         this.addNewEmployee = this.addNewEmployee.bind(this);
+        this.editEmployee = this.editEmployee.bind(this);
     }
 
     async addNewEmployee(data) {
@@ -51,6 +58,19 @@ class Employee extends Component {
         this.getAllDoctors();
         this.getAllReps();
     }
+
+    async editEmployee(data) {
+        console.log({ data })
+        if (data.speciality) {
+            await editDoctor(data.id, data)
+        } else {
+            await editNurse(data.id, data)
+        }
+        this.handleToggleDialogEdit();
+        this.getAllDoctors();
+        this.getAllReps();
+    }
+
 
     componentDidMount() {
         this.getAllDoctors();
@@ -83,10 +103,37 @@ class Employee extends Component {
         })
     }
 
+    deleteRep = async (id) => {
+        await deleteRep(id)
+        this.getAllDoctors();
+        this.getAllReps();
+    }
+
+    deleteDoc = async (id) => {
+        await deleteDoc(id)
+        this.getAllDoctors();
+        this.getAllReps();
+    }
+
+    getSelectedEmployee = async (type, id) => {
+        const { doctors, reps } = this.state;
+        let selectedEmployee = null;
+        if (type === "doctor") {
+            const result = doctors.filter(d => d.id === id)
+            selectedEmployee = result[0]
+        } else {
+            const result = reps.filter(r => r.id === id)
+            selectedEmployee = result[0]
+        }
+        this.setState({
+            selectedEmployee: selectedEmployee
+        })
+    }
+
 
 
     render() {
-        const { doctors, reps, isOpenDialogAdd } = this.state;
+        const { doctors, reps, isOpenDialogAdd, isOpenDialogEdit, selectedEmployee } = this.state;
         return <div className="employee full">
             <BreadCrumbs data={data} />
             {
@@ -94,6 +141,14 @@ class Employee extends Component {
                     open={isOpenDialogAdd}
                     handleToggleDialogAdd={this.handleToggleDialogAdd}
                     addNewEmployee={this.addNewEmployee}
+                />
+            }
+            {
+                isOpenDialogEdit && <EditEmployeeDialog
+                    open={isOpenDialogEdit}
+                    handleToggleDialogEdit={this.handleToggleDialogEdit}
+                    editEmployee={this.editEmployee}
+                    employee={selectedEmployee}
                 />
             }
             <div className="add-area">
@@ -115,9 +170,10 @@ class Employee extends Component {
                             <TableRow>
                                 <TableCell align="left">Employee Name</TableCell>
                                 <TableCell align="left">Job</TableCell>
-                                <TableCell align="left">Age</TableCell>
+                                <TableCell align="left">D.O.B</TableCell>
                                 <TableCell align="left">Phone</TableCell>
                                 <TableCell align="left">Email</TableCell>
+                                <TableCell align="left">Salary</TableCell>
                                 <TableCell align="left">Speciality</TableCell>
                                 <TableCell align="left">Action</TableCell>
                             </TableRow>
@@ -125,38 +181,34 @@ class Employee extends Component {
                         <TableBody>
                             {/*  */}
                             {doctors && doctors.map(d => {
-                                return <TableRow>
+                                return <TableRow key={d.id}>
                                     <TableCell align="left">{d.name}</TableCell>
                                     <TableCell align="left">Doctor</TableCell>
-                                    <TableCell align="left">{d.age}</TableCell>
+                                    <TableCell align="left">{d.dob}</TableCell>
                                     <TableCell align="left">{d.phone}</TableCell>
                                     <TableCell align="left">{d.email}</TableCell>
+                                    <TableCell align="left">{d.salary}</TableCell>
                                     <TableCell align="left">{d.speciality}</TableCell>
                                     <TableCell align="left">
-                                        <IconButton aria-label="edit">
+                                        <IconButton aria-label="edit" onClick={() => { this.handleToggleDialogEdit(); this.getSelectedEmployee('doctor', d.id) }}>
                                             <EditIcon fontSize="small" className="edit-button" />
-                                        </IconButton>
-                                        <IconButton aria-label="delete">
-                                            <DeleteIcon fontSize="small" color="secondary" />
                                         </IconButton>
                                     </TableCell>
                                 </TableRow>
                             })}
 
                             {reps && reps.map(r => {
-                                return <TableRow>
+                                return <TableRow key={r.id}>
                                     <TableCell align="left">{r.name}</TableCell>
-                                    <TableCell align="left">Receptionist</TableCell>
-                                    <TableCell align="left">{r.age}</TableCell>
+                                    <TableCell align="left">Nurse</TableCell>
+                                    <TableCell align="left">{r.dob}</TableCell>
                                     <TableCell align="left">{r.phone}</TableCell>
                                     <TableCell align="left">{r.email}</TableCell>
+                                    <TableCell align="left">{r.salary}</TableCell>
                                     <TableCell align="left"></TableCell>
                                     <TableCell align="left">
-                                        <IconButton aria-label="edit">
+                                        <IconButton aria-label="edit" onClick={() => { this.handleToggleDialogEdit(); this.getSelectedEmployee('nurse', r.id) }}>
                                             <EditIcon fontSize="small" className="edit-button" />
-                                        </IconButton>
-                                        <IconButton aria-label="delete">
-                                            <DeleteIcon fontSize="small" color="secondary" />
                                         </IconButton>
                                     </TableCell>
                                 </TableRow>
@@ -166,7 +218,7 @@ class Employee extends Component {
                     </Table>
                 </TableContainer>
             </section>
-        </div>
+        </div >
     }
 }
 

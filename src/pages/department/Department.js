@@ -16,8 +16,14 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import PersonAddDisabledIcon from '@material-ui/icons/PersonAddDisabled';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import TablePagination from '@material-ui/core/TablePagination';
-import { Link } from 'react-router-dom';
+import AddDepartmentDialog from './AddDepartmentDialog';
+import EditDepartmentDialog from './EditDepartmentDialog';
+
+import {
+    getDepartments, addDepartment, deleteDeparment, getOneDepartment,
+    addStafftoDep, removeStaff
+} from '../../utils/api';
+
 const data = {
     active:
         [
@@ -31,20 +37,81 @@ class Department extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            departments: [
-                { name: "Heart", doctors: [{ name: "doctor who" }, { name: "doctor where" }, { name: "doctor where" }, { name: "doctor where" }] },
-                { name: "Lungs", doctors: [{ name: "doctor who" }, { name: "doctor where" }] },
-            ],
+            departments: null,
             headCells: [
                 { id: 'name', label: 'Department Name', sortable: true },
-                { id: 'doctors', label: 'Doctors' },
+                { id: 'doctors', label: 'Staff' },
                 { id: 'action', label: 'Actions' },
             ],
             page: 0,
             rowsPerPage: 5,
             orderBy: 'name',
             orderDirection: 'asc',
+            isOpenDialogAdd: false,
+            isOpenDialogEdit: false,
+            selectedID: null,
+            isRemove: null
         }
+        this.getAllDeps = this.getAllDeps.bind(this);
+        this.addDepartment = this.addDepartment.bind(this);
+        this.addStafftoDep = this.addStafftoDep.bind(this);
+        this.removeStaff = this.removeStaff.bind(this);
+        this.handleToggleDialogAdd = this.handleToggleDialogAdd.bind(this);
+        this.handleToggleDialogEdit = this.handleToggleDialogEdit.bind(this);
+        this.deleteDepartment = this.deleteDepartment.bind(this);
+    }
+
+    componentDidMount() {
+        this.getAllDeps();
+    }
+
+    async getAllDeps() {
+        const departments = await getDepartments();
+        this.setState({
+            departments: departments
+        })
+    }
+
+    async addDepartment(name) {
+        await addDepartment(name);
+        this.handleToggleDialogAdd();
+        this.getAllDeps();
+    }
+
+    async deleteDepartment(id) {
+        const thisDep = await getOneDepartment(id);
+        if (thisDep && thisDep.staff.length === 0) {
+            await deleteDeparment(id);
+            this.getAllDeps();
+        } else {
+            alert('Department must be empty first')
+        }
+    }
+
+    async addStafftoDep(id, staffID) {
+        await addStafftoDep(id, staffID)
+        this.handleToggleDialogEdit();
+        this.getAllDeps();
+    }
+
+    async removeStaff(id) {
+        await removeStaff(id)
+        this.handleToggleDialogEdit();
+        this.getAllDeps();
+    }
+
+    handleToggleDialogAdd() {
+        this.setState((currentState) => ({
+            isOpenDialogAdd: !currentState.isOpenDialogAdd
+        }));
+    }
+
+    handleToggleDialogEdit(id, isRemove) {
+        this.setState((currentState) => ({
+            isOpenDialogEdit: !currentState.isOpenDialogEdit,
+            selectedID: id,
+            isRemove: isRemove
+        }));
     }
 
     handleChangePage = (event, newPage) => {
@@ -101,10 +168,25 @@ class Department extends Component {
 
 
     render() {
-        const { isOpenDialogAdd, isOpenDialogEdit, departments, currentPatient,
-            orderBy, orderDirection, headCells, page, rowsPerPage, } = this.state;
+        const { isOpenDialogAdd, isOpenDialogEdit, departments, selectedID,
+            orderBy, orderDirection, headCells, page, rowsPerPage, isRemove } = this.state;
         return <div className="department full">
             <BreadCrumbs data={data} />
+            {
+                isOpenDialogAdd && <AddDepartmentDialog
+                    open={isOpenDialogAdd}
+                    handleToggleDialogAdd={this.handleToggleDialogAdd}
+                    addDepartment={this.addDepartment}
+                />
+            }
+            {isOpenDialogEdit && <EditDepartmentDialog
+                open={isOpenDialogEdit}
+                handleToggleEditDialog={this.handleToggleDialogEdit}
+                addStafftoDep={this.addStafftoDep}
+                isRemove={isRemove}
+                selectedDepartment={selectedID}
+                removeStaff={this.removeStaff}
+            />}
             <div className="add-area">
                 <button className="report" onClick={this.handleToggleDialogAdd}><span>Add</span> <AddIcon /></button>
             </div>
@@ -142,22 +224,21 @@ class Department extends Component {
                             {departments && departments.length > 0 && this.sortDepartment(departments, this.getComparator(orderDirection, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((d) => <TableRow key={d.id}>
                                 <TableCell align="left">{d.name}</TableCell>
                                 <TableCell align="left">
-                                    <span>({d.doctors.length}) </span>
-                                    {d.doctors.map(doctor => {
+                                    <span>({d.staff.length}) </span>
+                                    {d.staff.map(doctor => {
                                         return <>
-
-                                            <Link to={`/patient-profile/${doctor.id}`} className="user-link">{doctor.name}</Link>
-                                            <span> , </span></>
+                                            <span> {doctor.name}, </span>
+                                        </>
                                     })}
                                 </TableCell>
                                 <TableCell align="left">
                                     <Button color="primary" size="small" >
-                                        <PersonAddIcon fontSize="small" className="edit-button" onClick={() => { this.handleEditButton(d.id) }}></PersonAddIcon>
+                                        <PersonAddIcon fontSize="small" className="edit-button" onClick={() => { this.handleToggleDialogEdit(d.id, false) }}></PersonAddIcon>
                                     </Button>
                                     <Button color="primary" size="small" >
-                                        <PersonAddDisabledIcon fontSize="small" className="remove-button" onClick={() => { this.handleEditButton(d.id) }}></PersonAddDisabledIcon>
+                                        <PersonAddDisabledIcon fontSize="small" className="remove-button" onClick={() => { this.handleToggleDialogEdit(d.id, true) }}></PersonAddDisabledIcon>
                                     </Button>
-                                    <Button color="secondary" size="small" onClick={() => { window.confirm('Do you want to delete ?') && this.deletePatient(d.id) }}>
+                                    <Button color="secondary" size="small" onClick={() => { window.confirm('Do you want to delete ?') && this.deleteDepartment(d.id) }}>
                                         <DeleteIcon fontSize="small" color="secondary"></DeleteIcon>
                                     </Button>
                                 </TableCell>

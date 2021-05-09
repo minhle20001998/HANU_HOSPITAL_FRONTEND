@@ -35,10 +35,7 @@ class Patient extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            patients: [
-                { id: "5", name: "Le Minh B", gender: "male", dob: "20-11-2000", address: "108", phoneNumber: "123456789" },
-                { id: "5", name: "Le Minh A", gender: "female", dob: "20-11-2000", address: "108", phoneNumber: "123456789" },
-            ],
+            patients: null,
             currentPatient: null,
             isOpenDialogAdd: false,
             isOpenDialogEdit: false,

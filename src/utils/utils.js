@@ -12,6 +12,9 @@ export function getFormattedDate(date) {
 }
 
 export function searchByIdArray(arr, id) {
+    console.log(arr)
+    console.log(id)
+
     return arr.filter((el) => el.id == id)[0]
 }
 
@@ -23,4 +26,20 @@ export function checkStillLogin() {
         return (token && isValid)
     }
     return false;
+}
+
+export function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
 }

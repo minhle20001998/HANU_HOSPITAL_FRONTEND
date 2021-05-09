@@ -5,22 +5,40 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
+import { getDoctors, getAllPatients } from '../../utils/api'
+
 class AddDialog extends Component {
     constructor(props) {
         super(props)
         this.state = {
             form: {
-                name: '',
-                catalog_name: '',
-                price: '',
-                address: '',
+                patientId: null,
+                doctorId: null,
+                diagnosis: '',
                 description: '',
-                roomtype: [],
-                image_link: [],
-            }
+                id: 0,
+            },
+            doctors: null,
+            patients: null
         };
         this.handleChangeInput = this.handleChangeInput.bind(this);
         this.handeAdd = this.handeAdd.bind(this);
+    }
+
+    async componentDidMount() {
+        const doctors = await getDoctors();
+        const patients = await getAllPatients();
+        if (doctors.length > 0 && patients.length > 0) {
+            this.setState((currentState) => ({
+                form: {
+                    ...currentState.form,
+                    doctorId: doctors[0].id,
+                    patientId: patients[0].id,
+                },
+                doctors: doctors,
+                patients: patients
+            }))
+        }
     }
 
     handleChangeInput(e) {
@@ -40,33 +58,26 @@ class AddDialog extends Component {
 
     render() {
         const { open, handleToggleDialogAdd } = this.props;
+        const { doctors, patients } = this.state;
         return (
             <Dialog open={open} >
                 <DialogTitle id="form-dialog-title">Add New Appointment</DialogTitle>
                 <DialogContent>
                     <div>
                         <DialogContentText>
+                            Doctor Name
+                        </DialogContentText>
+                        <select id="doctor" name="doctorId" onChange={this.handleChangeInput}>
+                            {doctors && doctors.map(d => <option value={d.id} key={d.id}>{`Dr. ${d.name}`}</option>)}
+                        </select>
+                    </div>
+                    <div>
+                        <DialogContentText>
                             Patient Name
                         </DialogContentText>
-                        <input type="text" name="name" onChange={this.handleChangeInput} />
-                    </div>
-                    <div>
-                        <DialogContentText>
-                            Service
-                        </DialogContentText>
-                        <input type="number" name="price" onChange={this.handleChangeInput} />
-                    </div>
-                    <div className="">
-                        <DialogContentText>
-                            Doctor
-                        </DialogContentText>
-                        <input type="text" name="doctor" onChange={this.handleChangeInput} />
-                    </div>
-                    <div>
-                        <DialogContentText>
-                            Date and Time
-                        </DialogContentText>
-                        <input type="date" name="address" onChange={this.handleChangeInput} />
+                        <select id="patient" name="patientId" onChange={this.handleChangeInput}>
+                            {patients && patients.map(p => <option value={p.id} key={p.id}>{`${p.name} (${p.dob})`}</option>)}
+                        </select>
                     </div>
                     <DialogActions>
                         <Button variant="contained" className="action-btn" id="save-btn" onClick={this.handeAdd}>

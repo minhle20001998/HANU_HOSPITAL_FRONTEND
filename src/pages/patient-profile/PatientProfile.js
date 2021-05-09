@@ -9,7 +9,7 @@ import ListItem from '@material-ui/core/ListItem';
 import TimeLine from '../../components/timeline/Timeline'
 import userImage from '../../images/user.png';
 import AddIcon from '@material-ui/icons/Add';
-import { getAllRecords } from '../../utils/api'
+import { getRecordByPatientId, getPatientByID, getDoctors } from '../../utils/api'
 const breadcrumbs = {
     active:
         [
@@ -24,9 +24,13 @@ class PatientProfile extends Component {
         super(props);
         this.state = {
             isOpenDialogAdd: false,
-            records: null
+            records: null,
+            patient: null,
+            doctors: null
         }
         this.handleToggleDialogAdd = this.handleToggleDialogAdd.bind(this);
+        this.findDoctor = this.findDoctor.bind(this);
+        this.getAll = this.getAll.bind(this);
 
     }
 
@@ -37,23 +41,64 @@ class PatientProfile extends Component {
     }
 
     addNewReport(data) {
-        console.log(data);
     }
 
-    async componentDidMount() {
-        const records = await getAllRecords();
+    componentDidMount() {
+        this.getAll()
+    }
+
+    getAll() {
+        this.getPatientByID()
+        this.getRecordByPatientId()
+        this.getAllDoctor()
+    }
+
+    async getPatientByID() {
+        const id = window.location.href.split("/").reverse()[0]
+        const patient = await getPatientByID(id);
+        this.setState({
+            patient: patient
+        })
+    }
+
+    async getRecordByPatientId() {
+        const id = window.location.href.split("/").reverse()[0]
+        const records = await getRecordByPatientId(id);
         this.setState({
             records: records
         })
-        const doctors = []
-        const patients = []
-        records.map(r => { 
-            doctors.push()
+    }
+
+    async getAllDoctor() {
+        const doctors = await getDoctors()
+        this.setState({
+            doctors: doctors
         })
     }
 
+    findDoctor(id) {
+        const { doctors } = this.state;
+        if (doctors) {
+            for (let i = 0; i < doctors.length; i++) {
+                for (let j = 0; j < doctors[i].records.length; j++) {
+                    if (doctors[i].records[j].id == id) {
+                        return doctors[i]
+                    }
+                }
+            }
+        }
+    }
+
+    dynamicSort(property) {
+        return function (a, b) {
+            return (a[property] < b[property]) ? 1 : (a[property] > b[property]) ? -1 : 0;
+        }
+    }
+
+
+
     render() {
-        const { isOpenDialogAdd, records } = this.state;
+        const { isOpenDialogAdd, records, patient } = this.state;
         return <div className="patient-profile full">
             <BreadCrumbs data={breadcrumbs} />
             {
@@ -67,19 +112,19 @@ class PatientProfile extends Component {
                 <aside>
                     <div id="patient-info">
                         <img src={userImage} alt="user-avatar" />
-                        <List component="nav" aria-label="mailbox folders">
+                        {patient && <List component="nav" aria-label="mailbox folders">
                             <ListItem >
                                 <Typography variant="h5" color="primary">
-                                    Patient Name
+                                    {patient.name}
                                 </Typography>
                             </ListItem>
                             <Divider />
                             <ListItem >
                                 <Typography variant="h6" >
-                                    Email
+                                    DOB
                                 </Typography>
                                 <Typography  >
-                                    test@gmail.com
+                                    {patient.dob}
                                 </Typography>
                             </ListItem>
                             <ListItem >
@@ -87,7 +132,7 @@ class PatientProfile extends Component {
                                     Phone
                                 </Typography>
                                 <Typography  >
-                                    0xxxxxxx
+                                    {patient.phoneNumber}
                                 </Typography>
                             </ListItem>
                             <ListItem >
@@ -95,44 +140,18 @@ class PatientProfile extends Component {
                                     Address
                                 </Typography>
                                 <Typography  >
-                                    69 Paleto Bay, US
+                                    {patient.address}
                                 </Typography>
                             </ListItem>
-                        </List>
+                        </List>}
                     </div>
-                    <div id="general-report">
-                        <Typography variant="h6" color="primary">
-                            General Report
-                        </Typography>
-                        <br />
-                        <div>
-                            <span style={{ fontSize: "17px", fontWeight: "bold" }}>Sex:	&nbsp;</span>
-                            <span>Male </span>
-                        </div>
-                        <div>
-                            <span style={{ fontSize: "17px", fontWeight: "bold" }}>Blood Type:	&nbsp;</span>
-                            <span>C </span>
-                        </div>
-                        <div>
-                            <span style={{ fontSize: "17px", fontWeight: "bold" }}>Height:	&nbsp;</span>
-                            <span>180 cm </span>
-                        </div>
-                        <div>
-                            <span style={{ fontSize: "17px", fontWeight: "bold" }}>Weight:	&nbsp;</span>
-                            <span>80 kg </span>
-                        </div>
-                        <div>
-                            <span style={{ fontSize: "17px", fontWeight: "bold" }}>Allergies:	&nbsp;</span>
-                            <span>Peanut, Potato</span>
-                        </div>
-                    </div>
+
                 </aside>
                 <main>
                     <Typography variant="h6" color="primary">
                         Activity
                     </Typography>
-                    <button className="report" onClick={this.handleToggleDialogAdd}><span>Add</span> <AddIcon /></button>
-                    <TimeLine records={records} />
+                    {records && <TimeLine records={records.sort(this.dynamicSort('id'))} findDoctor={this.findDoctor} getAll={this.getAll} />}
                 </main>
             </section>
         </div>

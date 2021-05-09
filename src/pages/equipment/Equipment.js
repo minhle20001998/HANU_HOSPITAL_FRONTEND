@@ -15,7 +15,8 @@ import AddIcon from '@material-ui/icons/Add';
 import { Link } from 'react-router-dom'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-
+import { getAllEquipment, addNewEquipment, deleteEquiment } from '../../utils/api';
+import AddEquipmentDialog from './AddEquipmentDialog';
 const data = {
     active:
         [
@@ -25,11 +26,60 @@ const data = {
 }
 
 class Equipment extends Component {
+
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            equipment: null,
+            isOpenAddDialog: false
+        }
+        this.addNewEquipment = this.addNewEquipment.bind(this);
+        this.deleteEquiment = this.deleteEquiment.bind(this);
+    }
+
+    componentDidMount() {
+        this.getAllEquipment();
+    }
+
+    async getAllEquipment() {
+        const equipment = await getAllEquipment();
+        this.setState({
+            equipment: equipment
+        })
+    }
+
+    handleToggleAddDialog = () => {
+        this.setState((currentState) => ({
+            isOpenAddDialog: !currentState.isOpenAddDialog
+        }));
+    };
+
+    async addNewEquipment(name) {
+        await addNewEquipment(name)
+        this.handleToggleAddDialog()
+        this.getAllEquipment()
+    }
+
+    async deleteEquiment(id) {
+        if (window.confirm("Do you want to delete this service ?")) {
+            await deleteEquiment(id)
+            this.getAllEquipment()
+        }
+    }
+
+
     render() {
+        const { equipment, isOpenAddDialog } = this.state;
         return <div className="equipment full">
             <BreadCrumbs data={data} />
+            {AddEquipmentDialog && <AddEquipmentDialog
+                open={isOpenAddDialog}
+                handleToggleAddDialog={this.handleToggleAddDialog}
+                addNewEquipment={this.addNewEquipment}
+            />}
             <div className="add-area">
-                <button className="report" onClick={this.handleToggleDialogAdd}><span>Add</span> <AddIcon /></button>
+                <button className="report" onClick={this.handleToggleAddDialog}><span>Add</span> <AddIcon /></button>
             </div>
             <section id="patient-section" className="main-section">
                 <TableContainer component={Paper}>
@@ -45,35 +95,28 @@ class Equipment extends Component {
                     <Table aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell align="left">ID</TableCell>
-                                <TableCell align="left">Patient Name</TableCell>
-                                <TableCell align="left">DOB</TableCell>
-                                <TableCell align="left">Address</TableCell>
-                                <TableCell align="left">Number</TableCell>
+                                <TableCell align="left">Name</TableCell>
+                                <TableCell align="left">Price</TableCell>
+                                <TableCell align="left">Quantity</TableCell>
                                 <TableCell align="left">Action</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {/*  */}
-                            <TableRow>
-                                <TableCell align="left">1</TableCell>
-                                <TableCell align="left">
-                                    <Link to="/" className="user-link">Le Tuan Minh</Link>
-                                </TableCell>
-                                <TableCell align="left">24-09-200</TableCell>
-                                <TableCell align="left">108 Cu Chinh Lan</TableCell>
-                                <TableCell align="left">096479454</TableCell>
-                                <TableCell align="left">
-                                    <Button color="primary" size="small">
-                                        <EditIcon fontSize="small" className="edit-button"></EditIcon>
-                                    </Button>
-                                    <Button color="secondary" size="small">
-                                        <DeleteIcon fontSize="small" color="secondary"></DeleteIcon>
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                            {/*  */}
-
+                            {equipment && equipment.length > 0 && equipment.map(e => {
+                                return <TableRow key={e.id}>
+                                    <TableCell align="left">{e.name}</TableCell>
+                                    <TableCell align="left">{e.price}</TableCell>
+                                    <TableCell align="left">{e.quantity}</TableCell>
+                                    <TableCell align="left">
+                                        <IconButton id={e.id} color="primary" size="small" onClick={this.handleToggleEditDialog}>
+                                            <EditIcon id={e.id} fontSize="small" className="edit-button"></EditIcon>
+                                        </IconButton>
+                                        <IconButton id={e.id} color="secondary" size="small" onClick={() => { this.deleteEquiment(e.id)}} className="delete-btn">
+                                            <DeleteIcon id={e.id} fontSize="small" color="secondary" ></DeleteIcon>
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            })}
                         </TableBody>
                     </Table>
                 </TableContainer>

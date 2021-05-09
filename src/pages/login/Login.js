@@ -40,8 +40,6 @@ class Login extends Component {
         }
     }
 
-
-
     render() {
         const { status } = this.state;
         return <div className="login">
@@ -53,15 +51,11 @@ class Login extends Component {
                     <p style={{ padding: '10px 0px', color: 'red' }}>{status}</p>
                 </div>
                 <TextField id="outlined-basic" label="Username Or Email" variant="outlined" onInput={(e) => { this.handleInput("usernameOrEmail", e) }} />
-                <TextField id="outlined-basic" label="Password" variant="outlined" onInput={(e) => { this.handleInput("password", e) }} />
+                <TextField id="outlined-basic" label="Password" type="password" variant="outlined" onInput={(e) => { this.handleInput("password", e) }} />
                 <Button variant="contained" id="green-text" type="submit">
                     Log In
                 </Button>
-                <div className="flex-center signup-link" style={{ marginTop: "40px" }}>
-                    <Link to="signup" >Signup Here !</Link>
-                </div>
             </form>
-
         </div>
     }
 }

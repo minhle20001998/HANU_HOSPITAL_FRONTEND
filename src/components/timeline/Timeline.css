@@ -59,3 +59,33 @@
 #add-btn {
   color: green;
 }
+
+.discharged {
+  color: rgb(255, 55, 55);
+  background-color: rgb(255, 224, 224);
+}
+
+.not-discharge {
+  color: green;
+  background-color: rgb(239, 255, 241);
+}
+
+.timeline .MuiButton-label {
+  color: red;
+}
+
+.green-color {
+  color: rgb(47, 47, 255);
+  font-size: 15px;
+}
+
+.red-color {
+  color: rgb(255, 36, 36);
+  font-size: 15px;
+}
+
+.underline {
+  color: rgb(133, 0, 0);
+  font-size: 20px;
+  text-decoration: underline;
+}

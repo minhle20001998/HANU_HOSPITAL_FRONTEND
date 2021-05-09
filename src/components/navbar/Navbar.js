@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Navbar.css';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { Link } from 'react-router-dom'
-
+import { checkStillLogin } from '../../utils/utils'
 class Navbar extends Component {
     render() {
         return <nav className="main-nav">
@@ -12,10 +12,11 @@ class Navbar extends Component {
                     <span>HANU HOSPITAL</span>
                 </Link>
             </div>
-            <div className="actions">
-                <Link to="/login">
+            <div className="actions" onClick={() => { localStorage.removeItem("token"); }}>
+                {checkStillLogin() == true ? <Link to="/login">
                     <ExitToAppIcon color="secondary" />
-                </Link>
+                </Link> : <></>}
+
             </div>
         </nav>
     }

@@ -17,7 +17,7 @@ import AddIcon from '@material-ui/icons/Add';
 import './Appointment.css';
 import AddDialog from './AddAppointmentDialog';
 import { Link } from 'react-router-dom'
-
+import { getDoctors, getAllPatients, getAllAppointment, addNewAppointment } from '../../utils/api'
 const data = {
     active:
         [
@@ -31,9 +31,13 @@ class Appointment extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            appointment: null,
             isOpenDialogAdd: false,
+            doctors: null,
+            patients: null
         }
         this.handleToggleDialogAdd = this.handleToggleDialogAdd.bind(this);
+        this.addNewReport = this.addNewReport.bind(this);
 
     }
 
@@ -43,15 +47,58 @@ class Appointment extends Component {
         }));
     }
 
-    addNewReport(data) {
-        console.log(data);
+    async addNewReport(data) {
+        await addNewAppointment(data)
+        this.handleToggleDialogAdd()
+        this.getAllAppointment()
     }
 
-    componentDidMount(){
+    componentDidMount() {
+        this.getAllAppointment();
+    }
+
+    async getAllAppointment() {
+        const appointment = await getAllAppointment()
+        const doctors = await getDoctors()
+        const patients = await getAllPatients()
+        this.setState({
+            doctors: doctors,
+            patients: patients,
+            appointment: appointment
+        })
+    }
+
+
+    findDoctor(id) {
+        const { doctors } = this.state;
+        if (doctors) {
+            for (let i = 0; i < doctors.length; i++) {
+                for (let j = 0; j < doctors[i].records.length; j++) {
+                    if (doctors[i].records[j].id == id) {
+                        return doctors[i]
+                    }
+                }
+            }
+        }
+    }
+
+    findPatient(id) {
+        const { patients } = this.state;
+        console.log(patients)
+        if (patients) {
+            for (let i = 0; i < patients.length; i++) {
+                for (let j = 0; j < patients[i].records.length; j++) {
+                    if (patients[i].records[j].id == id) {
+                        return patients[i]
+                    }
+                }
+            }
+        }
     }
 
     render() {
-        const { isOpenDialogAdd } = this.state;
+        this.findDoctor(3)
+        const { appointment, isOpenDialogAdd, doctors, patients } = this.state;
         return <div className="appointment full">
             <BreadCrumbs data={data} />
             {
@@ -78,39 +125,26 @@ class Appointment extends Component {
                     <Table aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell align="left">ID</TableCell>
+                                <TableCell align="left">Doctor Name</TableCell>
                                 <TableCell align="left">Patient Name</TableCell>
-                                <TableCell align="left">Date & Time</TableCell>
-                                <TableCell align="left">Service</TableCell>
-                                <TableCell align="left">Doctor</TableCell>
                                 <TableCell align="left">Action</TableCell>
+
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {/*  */}
-                            <TableRow>
-                                <TableCell align="left">1</TableCell>
-                                <TableCell align="left">Le Tuan Minh</TableCell>
-                                <TableCell align="left">
-                                    <p style={{ marginBottom: "10px" }}>13 June 2019</p>
-                                    <p>7:12PM to 8:30PM</p>
-                                </TableCell>
-                                <TableCell align="left">Dental Checkup</TableCell>
-                                <TableCell align="left">Dr.Jimmy</TableCell>
-                                <TableCell align="left">
-                                    <Link to="patient-profile">
-                                        <Button variant="outlined" color="primary" size="small" >
-
-                                            <RemoveRedEyeIcon></RemoveRedEyeIcon>
-                                        </Button>
-                                    </Link>
-                                    <Button variant="outlined" color="secondary" size="small">
-                                        <VisibilityOffIcon></VisibilityOffIcon>
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                            {/*  */}
-
+                            {appointment && doctors && patients && appointment.length > 0 && appointment.map(a => {
+                                return <TableRow>
+                                    <TableCell align="left">{this.findDoctor(a.id).name}</TableCell>
+                                    <TableCell align="left">{this.findPatient(a.id).name}</TableCell>
+                                    <TableCell align="left">
+                                        <Link to={`patient-profile/${this.findPatient(a.id).id}`}>
+                                            <Button color="primary" size="small" >
+                                                <RemoveRedEyeIcon></RemoveRedEyeIcon>
+                                            </Button>
+                                        </Link>
+                                    </TableCell>
+                                </TableRow>
+                            })}
                         </TableBody>
                     </Table>
                 </TableContainer>
